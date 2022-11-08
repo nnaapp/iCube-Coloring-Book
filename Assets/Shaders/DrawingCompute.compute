@@ -1,0 +1,26 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel Update
+#pragma kernel InitBackground
+
+RWTexture2D<float4> _Canvas;
+
+float2 _MousePos;
+bool _MouseDown;
+float _BrushSize;
+float4 _Color;
+
+[numthreads(8,8,1)]
+void InitBackground(uint3 id : SV_DispatchThreadID)
+{
+	_Canvas[id.xy] = float4(0, 0, 0, 0);
+}
+
+[numthreads(8,8,1)]
+void Update(uint3 id : SV_DispatchThreadID)
+{
+	if (_MouseDown)
+	{
+		if (length(id.xy - _MousePos) < _BrushSize)
+			_Canvas[id.xy] = _Color;
+	}
+}

@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - PlayerController
+  - Image
+  - RawImage
+  - DrawingCamera
+  - DefaultColor
+  - DefaultSize
+  - UIObjects
+  - RawImage2
+  - UIContainer
+  - MenuControl
+  - ActiveStencil
+  - ColorIndicator
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - Brushes
+  - Static UI
+  - Stencil
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Brush
+    uniqueID: 2111875933
+    locked: 0
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Canvas
+    uniqueID: 850113201
+    locked: 0
+  - name: UI Accent
+    uniqueID: 3656217725
+    locked: 0
+  - name: UI
+    uniqueID: 3710653101
+    locked: 0
