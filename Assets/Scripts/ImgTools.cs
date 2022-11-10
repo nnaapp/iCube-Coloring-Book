@@ -138,7 +138,7 @@ namespace BookLib
                 Debug.Log((Input.mousePosition.x - imgBoundsScreen[0].x) + " " + (Input.mousePosition.y - imgBoundsScreen[0].y));
                 Debug.Log(Input.mousePosition.x + " " + Input.mousePosition.y);
             }*/
-            if (Input.GetKeyDown(KeyCode.R))
+            /*if (Input.GetKeyDown(KeyCode.R))
             {
                 undoTextures.Clear();
                 redoTextures.Clear();
@@ -148,13 +148,13 @@ namespace BookLib
                 colorMap = mainTexture.GetPixels32();
                 GenerateIDMap();
                 StampStencil();
-            }
-            if (Input.GetKeyDown(KeyCode.D))
+            }*/
+            /*if (Input.GetKeyDown(KeyCode.D))
             {
                 Debug.Log("Downloading active texture.");
                 DownloadImage();
-            }
-            if (Input.GetKeyDown(KeyCode.Z))
+            }*/
+            /*if (Input.GetKeyDown(KeyCode.Z))
             {
                 if (undoTextures.Peek() != default(Texture2D))
                 {
@@ -169,7 +169,7 @@ namespace BookLib
                     Debug.Log("Redo");
                     Redo();
                 }
-            }
+            }*/
 
             if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonUp(0))
                 validStroke = false; // default
@@ -535,7 +535,7 @@ namespace BookLib
 
         public void Redo()
         {
-            if (redoTextures.Peek() != default(Texture2D))
+            if (redoTextures.Peek() == default(Texture2D))
                 return;
 
             SetUndoTexture();
@@ -574,6 +574,18 @@ namespace BookLib
                 redoTextures.Drop();
 
             redoTextures.Push(temp);
+        }
+
+        public void NextStencil()
+        {
+            undoTextures.Clear();
+            redoTextures.Clear();
+            Debug.Log("Switching to next stencil in list.");
+            if (++activeStencil >= stencils.Count) { activeStencil = 0; }
+            mainTexture = allTextures[activeStencil];
+            colorMap = mainTexture.GetPixels32();
+            GenerateIDMap();
+            StampStencil();
         }
         
         public void SetSelectedColor(Color32 color)
