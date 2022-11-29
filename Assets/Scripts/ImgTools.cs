@@ -260,7 +260,6 @@ namespace BookLib
             {
                 validStroke = true;
 
-                Debug.Log("Initial brush frame");
                 redoTextures.Clear();
                 SetUndoTexture();
 
@@ -407,7 +406,6 @@ namespace BookLib
             Color32 oldColor = colorMap[x + (imgWidth * y)];
             if (oldColor.r == selectedColor.r && oldColor.g == selectedColor.g && oldColor.b == selectedColor.b)
             { // For some reason oldColor.Equals(selectedColor) was not working specifically for white, so this is the "fix"
-                Debug.Log("Invalid fill location.");
                 yield break;
             }
 
@@ -580,7 +578,6 @@ namespace BookLib
         {
             undoTextures.Clear();
             redoTextures.Clear();
-            Debug.Log("Switching to next stencil in list.");
             if (++activeStencil >= stencils.Count) { activeStencil = 0; }
             mainTexture = allTextures[activeStencil];
             colorMap = mainTexture.GetPixels32();
@@ -593,8 +590,6 @@ namespace BookLib
             selectedColor = color;
             selectedColorCode = BookLib.C32toi(color);
             indicator.SetColor(color);
-            Debug.Log("alpha:" + selectedColor.a);
-            Debug.Log(color.a / 255f + " " + color.g / 255f + " " + color.b / 255f + " " + alpha);
         }
 
         public Color32 GetSelectedColor()

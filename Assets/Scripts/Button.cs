@@ -26,8 +26,6 @@ namespace BookLib
         {
             if (!control)
                 control = GameObject.FindGameObjectWithTag("PlayerController").GetComponent<PlayerController>();
-            if (!control)
-                Debug.Log("Player Controller not assigned and could not be found automatically, check inspector for irregular behavior.");
             if (!img)
                 img = GameObject.FindWithTag("Image").GetComponent<ImgTools>();
 
@@ -52,21 +50,17 @@ namespace BookLib
 
         public void OnClick()
         {
-            Debug.Log("test");
             try
             {
                 switch (buttonType)
                 {
                     case ButtonType.Color:
-                        Debug.Log(colorValue + " color button pressed");
                         UpdateColor();
                         break;
                     case ButtonType.Size:
-                        Debug.Log(sizeValue + " size button pressed");
                         UpdateSize();
                         break;
                     case ButtonType.Alpha:
-                        Debug.Log(alphaValue + " alpha button pressed");
                         UpdateAlpha();
                         break;
                     default:
