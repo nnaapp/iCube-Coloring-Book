@@ -330,7 +330,7 @@ MonoBehaviour:
   control: {fileID: 0}
   img: {fileID: 0}
   sizeValue: 0
-  colorValue: {r: 0.98748064, g: 0, b: 1, a: 1}
+  colorValue: {r: 0.42448425, g: 0, b: 1, a: 1}
   alphaValue: 0
   buttonType: 0
 --- !u!114 &90337686
@@ -634,7 +634,7 @@ MonoBehaviour:
   control: {fileID: 0}
   img: {fileID: 0}
   sizeValue: 0
-  colorValue: {r: 0, g: 0.028726578, b: 1, a: 1}
+  colorValue: {r: 0.9607843, g: 0.45490196, b: 0.14901961, a: 1}
   alphaValue: 0
   buttonType: 0
 --- !u!114 &172899648
@@ -1380,7 +1380,7 @@ MonoBehaviour:
   control: {fileID: 0}
   img: {fileID: 0}
   sizeValue: 0
-  colorValue: {r: 1, g: 0, b: 0, a: 1}
+  colorValue: {r: 0.8729302, g: 0.8773585, b: 0.30128157, a: 1}
   alphaValue: 0
   buttonType: 0
 --- !u!114 &392901137
@@ -2239,7 +2239,7 @@ MonoBehaviour:
   control: {fileID: 0}
   img: {fileID: 0}
   sizeValue: 0
-  colorValue: {r: 0.64714336, g: 0, b: 1, a: 1}
+  colorValue: {r: 0, g: 0, b: 0, a: 1}
   alphaValue: 0
   buttonType: 0
 --- !u!114 &748140037
@@ -2391,7 +2391,7 @@ MonoBehaviour:
   control: {fileID: 0}
   img: {fileID: 0}
   sizeValue: 0
-  colorValue: {r: 1, g: 1, b: 1, a: 1}
+  colorValue: {r: 0.9695823, g: 1, b: 0, a: 1}
   alphaValue: 0
   buttonType: 0
 --- !u!114 &770078536
@@ -2543,7 +2543,7 @@ MonoBehaviour:
   control: {fileID: 0}
   img: {fileID: 0}
   sizeValue: 0
-  colorValue: {r: 1, g: 0.9445847, b: 0, a: 1}
+  colorValue: {r: 1, g: 0.30566037, b: 0.9453455, a: 1}
   alphaValue: 0
   buttonType: 0
 --- !u!114 &806089189
@@ -2789,7 +2789,7 @@ MonoBehaviour:
   control: {fileID: 0}
   img: {fileID: 0}
   sizeValue: 0
-  colorValue: {r: 1, g: 0, b: 0, a: 1}
+  colorValue: {r: 0.61960787, g: 0.38039216, b: 0.2901961, a: 1}
   alphaValue: 0
   buttonType: 0
 --- !u!1 &890452912
@@ -4023,7 +4023,7 @@ MonoBehaviour:
   control: {fileID: 0}
   img: {fileID: 0}
   sizeValue: 0
-  colorValue: {r: 0, g: 0, b: 0, a: 1}
+  colorValue: {r: 0.563843, g: 0.3029014, b: 0.8584906, a: 1}
   alphaValue: 0
   buttonType: 0
 --- !u!114 &1059987287
@@ -4555,7 +4555,7 @@ MonoBehaviour:
   control: {fileID: 0}
   img: {fileID: 0}
   sizeValue: 0
-  colorValue: {r: 0, g: 1, b: 0.13177848, a: 1}
+  colorValue: {r: 0.93333334, g: 0.7058824, b: 0.70980394, a: 1}
   alphaValue: 0
   buttonType: 0
 --- !u!114 &1099732979
@@ -6749,7 +6749,7 @@ MonoBehaviour:
   control: {fileID: 0}
   img: {fileID: 0}
   sizeValue: 0
-  colorValue: {r: 0, g: 0.028726578, b: 1, a: 1}
+  colorValue: {r: 1, g: 1, b: 1, a: 1}
   alphaValue: 0
   buttonType: 0
 --- !u!114 &1593874646
@@ -6938,7 +6938,7 @@ MonoBehaviour:
   control: {fileID: 0}
   img: {fileID: 0}
   sizeValue: 0
-  colorValue: {r: 1, g: 0.45340014, b: 0, a: 1}
+  colorValue: {r: 1, g: 0.25536296, b: 0.20188677, a: 1}
   alphaValue: 0
   buttonType: 0
 --- !u!114 &1634124132
@@ -7242,7 +7242,7 @@ MonoBehaviour:
   control: {fileID: 0}
   img: {fileID: 0}
   sizeValue: 0
-  colorValue: {r: 1, g: 0.45340014, b: 0, a: 1}
+  colorValue: {r: 0, g: 1, b: 0.99999976, a: 1}
   alphaValue: 0
   buttonType: 0
 --- !u!114 &1689487799
@@ -7443,7 +7443,7 @@ MonoBehaviour:
   control: {fileID: 0}
   img: {fileID: 0}
   sizeValue: 0
-  colorValue: {r: 1, g: 0.9445847, b: 0, a: 1}
+  colorValue: {r: 0.16470589, g: 0.3882353, b: 0.64705884, a: 1}
   alphaValue: 0
   buttonType: 0
 --- !u!114 &1730043937
@@ -8160,7 +8160,7 @@ MonoBehaviour:
   control: {fileID: 0}
   img: {fileID: 0}
   sizeValue: 0
-  colorValue: {r: 0, g: 1, b: 0.13177848, a: 1}
+  colorValue: {r: 0.90588236, g: 0.7019608, b: 0.5686275, a: 1}
   alphaValue: 0
   buttonType: 0
 --- !u!114 &1885459500
@@ -8900,7 +8900,7 @@ MonoBehaviour:
   control: {fileID: 0}
   img: {fileID: 0}
   sizeValue: 0
-  colorValue: {r: 0, g: 0.895936, b: 1, a: 1}
+  colorValue: {r: 0.5660378, g: 0.5660378, b: 0.5660378, a: 1}
   alphaValue: 0
   buttonType: 0
 --- !u!114 &1934130828
@@ -9052,7 +9052,7 @@ MonoBehaviour:
   control: {fileID: 0}
   img: {fileID: 0}
   sizeValue: 0
-  colorValue: {r: 0.98748064, g: 0, b: 1, a: 1}
+  colorValue: {r: 0.5529412, g: 0.6431373, b: 0.7372549, a: 1}
   alphaValue: 0
   buttonType: 0
 --- !u!114 &1945953985
@@ -9458,7 +9458,7 @@ MonoBehaviour:
   control: {fileID: 0}
   img: {fileID: 0}
   sizeValue: 0
-  colorValue: {r: 0, g: 0.895936, b: 1, a: 1}
+  colorValue: {r: 0.30922037, g: 0.8113208, b: 0.33634812, a: 1}
   alphaValue: 0
   buttonType: 0
 --- !u!114 &1980462712
@@ -9914,7 +9914,7 @@ MonoBehaviour:
   control: {fileID: 0}
   img: {fileID: 0}
   sizeValue: 0
-  colorValue: {r: 0.64714336, g: 0, b: 1, a: 1}
+  colorValue: {r: 0.39215687, g: 0.5294118, b: 0.3647059, a: 1}
   alphaValue: 0
   buttonType: 0
 --- !u!114 &2101397217
