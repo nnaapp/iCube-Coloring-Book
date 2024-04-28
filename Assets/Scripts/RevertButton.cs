@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RevertButton : MonoBehaviour
 {
-    [SerializeField] private RevType type;
+    [SerializeField] private RevType type = RevType.Redo;
     [SerializeField] private BookLib.ImgTools img;
 
     enum RevType

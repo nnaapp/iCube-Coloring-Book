@@ -28,35 +28,50 @@ namespace BookLib
         private static Color32 STENCIL_COLOR = new Color32(1, 1, 1, 255);
         private const int REVERT_CAPACITY = 10;
 
-        [SerializeField] private RawImage solidLayer;
+        // RawImage that contains the drawn-on image, which can be downloaded and is shown on screen
+        [SerializeField] private RawImage finalDrawnImage;
+        // PlayerController handles the brush, brush resizing, and color picking
         [SerializeField] private PlayerController playerControl;
+        // Indicator that changes colors with what the player selects
         [SerializeField] private ColorIndicator indicator;
+        // List of GameObjects that have images, which will be drawn on like a stencil
         [SerializeField] private List<GameObject> stencils;
         private int activeStencil;
-        private GameObject uiToHide;
-        private GameObject stencil;
 
+        // Raw pixel color data array, 1 dimension indexed 2 dimensionally
         private Color32[] colorMap;
+        // Array of the same color data represented as integer IDs, used to compare color signatures
         private uint[] idMap;
+        // Hashmap of uint IDs to colors
         private Dictionary<uint, Color32> currentHash;
+        // Hashmap of stencil ID to pixel-by-pixel alpha bytes
         private Dictionary<int, List<BookLib.IntBytePair>> stencilIndexDict;
+        // List of all textures, so that the drawings are preserved when switching stencils
         private Dictionary<int, Texture2D> allTextures;
+        // Current drawing texture, which is passed to the finalDrawnImage for display and downloading
         private Texture2D mainTexture;
+        // Lists of Undo and Redo textures, so the user can flip back and forth between brush strokes and changes
         private BookLib.RevertContainer<Texture2D> undoTextures;
         private BookLib.RevertContainer<Texture2D> redoTextures;
 
-
+        // Current image width and height
         private int imgWidth;
         private int imgHeight;
+        // Bounds on the image on the screen
         private Vector3[] imgBoundsScreen;
+        // Bounds of the screen NOT INCLUDING UI, only drawable area
+        private Vector2 screenBounds;
 
+        // Currently active drawing tool, color, and color/brush data
         [SerializeField] private Tools activeTool;
         private Color32 selectedColor;
         private uint selectedColorCode;
         private int alpha;
         private int brushSize;
+        // Tracks if the current brush stroke is still valid or not, to prevent drawing under UI
         private bool validStroke;
 
+        // Previous position of the mouse, so that a brush stroke can be drawn between this and current position
         private Vector3 mousePosPrev;
 
         public enum Tools
@@ -73,14 +88,10 @@ namespace BookLib
 
         private void Start()
         {
-            if (!solidLayer)
-                solidLayer = GameObject.FindWithTag("RawImage").GetComponent<RawImage>();
+            if (!finalDrawnImage)
+                finalDrawnImage = GameObject.FindWithTag("RawImage").GetComponent<RawImage>();
             if (!playerControl)
                 playerControl = GameObject.FindWithTag("PlayerController").GetComponent<PlayerController>();
-            if (!uiToHide)
-                uiToHide = GameObject.FindWithTag("UIContainer");
-            if (!stencil)
-                stencil = GameObject.FindWithTag("ActiveStencil");
             if (!indicator)
                 indicator = GameObject.FindWithTag("ColorIndicator").GetComponent<ColorIndicator>();
 
@@ -91,16 +102,16 @@ namespace BookLib
             SetAlpha(playerControl.GetAlpha());
             SetSelectedColor(playerControl.GetColor());
 
-            uiToHide.SetActive(false);
-
             imgBoundsScreen = new Vector3[4];
-            solidLayer.rectTransform.GetWorldCorners(imgBoundsScreen);
+            finalDrawnImage.rectTransform.GetWorldCorners(imgBoundsScreen);
             for (int i = 0; i < imgBoundsScreen.Length; i++)
             {
                 imgBoundsScreen[i] = Camera.main.WorldToScreenPoint(imgBoundsScreen[i]);
             }
-            imgWidth = (int)(imgBoundsScreen[3].x - imgBoundsScreen[0].x);
-            imgHeight = (int)(imgBoundsScreen[1].y - imgBoundsScreen[0].y);
+            screenBounds = BookLib.RectRelativePos(imgBoundsScreen, new Vector2(Screen.width, Screen.height));
+            imgWidth = finalDrawnImage.GetComponent<RawImage>().texture.width;
+            imgHeight = finalDrawnImage.GetComponent<RawImage>().texture.height;
+            Debug.Log(imgWidth + " " + imgHeight);
 
             allTextures = new Dictionary<int, Texture2D>();
             stencilIndexDict = new Dictionary<int, List<BookLib.IntBytePair>>();
@@ -117,60 +128,11 @@ namespace BookLib
             mainTexture = allTextures[0];
             StampStencil();
 
-            uiToHide.SetActive(true);
             stencils[activeStencil].SetActive(false);
         }
 
         private void Update()
         {
-            /*if (Input.GetKeyDown(KeyCode.L))
-            {
-                StartCoroutine(StartScanLineFill(Input.mousePosition));
-            }
-            if (Input.GetKeyDown(KeyCode.I))
-            {
-                Debug.Log(imgBoundsScreen[3].x - imgBoundsScreen[0].x);
-                Debug.Log(imgBoundsScreen[1].y - imgBoundsScreen[0].y);
-                Debug.Log(imgWidth + " " + imgHeight);
-            }
-            if (Input.GetKeyDown(KeyCode.M))
-            {
-                Debug.Log((Input.mousePosition.x - imgBoundsScreen[0].x) + " " + (Input.mousePosition.y - imgBoundsScreen[0].y));
-                Debug.Log(Input.mousePosition.x + " " + Input.mousePosition.y);
-            }*/
-            /*if (Input.GetKeyDown(KeyCode.R))
-            {
-                undoTextures.Clear();
-                redoTextures.Clear();
-                Debug.Log("Switching to next stencil in list.");
-                if (++activeStencil >= stencils.Count) { activeStencil = 0; }
-                mainTexture = allTextures[activeStencil];
-                colorMap = mainTexture.GetPixels32();
-                GenerateIDMap();
-                StampStencil();
-            }*/
-            /*if (Input.GetKeyDown(KeyCode.D))
-            {
-                Debug.Log("Downloading active texture.");
-                DownloadImage();
-            }*/
-            /*if (Input.GetKeyDown(KeyCode.Z))
-            {
-                if (undoTextures.Peek() != default(Texture2D))
-                {
-                    Debug.Log("Undo");
-                    Undo();
-                }
-            }
-            if (Input.GetKeyDown(KeyCode.Y))
-            {
-                if (redoTextures.Peek() != default(Texture2D))
-                {
-                    Debug.Log("Redo");
-                    Redo();
-                }
-            }*/
-
             if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonUp(0))
                 validStroke = false; // default
 
@@ -206,34 +168,31 @@ namespace BookLib
             mainTexture.SetPixels32(colorMap);
             mainTexture.Apply();
             allTextures[activeStencil] = mainTexture;
-            solidLayer.texture = mainTexture;
+            finalDrawnImage.texture = mainTexture;
         }
 
+        // Generates a map of which pixels in the stencil are non-background,
+        // so that the relevant pixels can be "stamped" onto the drawing area.
         private void GenerateStencilMap()
         {
-            Camera.main.targetTexture = new RenderTexture(Screen.width, Screen.height, 24);
-            Camera.main.Render();
-
-            RenderTexture scaledRender = new(imgWidth, imgHeight, 24);
-            Graphics.Blit(Camera.main.targetTexture, scaledRender);
-            RenderTexture.active = scaledRender;
-            Texture2D stencilTex = new(imgWidth, imgHeight, TextureFormat.RGBA32, false);
-            stencilTex.ReadPixels(new Rect(0, 0, scaledRender.width, scaledRender.height), 0, 0);
-            RenderTexture.active = null;
-            Camera.main.targetTexture = null;
-
+            // Get raw image, get stencil texture
+            RawImage rawImage = stencils[activeStencil].GetComponent<RawImage>();
+            Texture2D stencilTex = (Texture2D)rawImage.texture;
+            stencilTex.Apply();
+            
+            // Get pixels from stencil texture, and derive background color from them
             Color32[] tempMap;
             tempMap = stencilTex.GetPixels32();
             Color32 backgroundColor = tempMap[0];
 
+            // Iterate over the stencil texture, and mark which pixels are background or not
+            // by logging what alpha they should be
             stencilIndexDict[activeStencil] = new List<BookLib.IntBytePair>();
             for (int i = 0; i < imgWidth * imgHeight; i++)
             {
                 if (!tempMap[i].Equals(backgroundColor))
                     stencilIndexDict[activeStencil].Add(new BookLib.IntBytePair(i, tempMap[i].a));
             }
-
-            Destroy(stencilTex);
         }
 
         private void StampStencil()
@@ -249,7 +208,7 @@ namespace BookLib
             mainTexture.SetPixels32(colorMap);
             mainTexture.Apply();
             allTextures[activeStencil] = mainTexture;
-            solidLayer.texture = mainTexture;
+            finalDrawnImage.texture = mainTexture;
         }
 
         private void BrushTool(int a, Color32 color)
@@ -301,8 +260,13 @@ namespace BookLib
 
         private void DrawNoShader(Vector2 mousePos, Color32 color)
         {
-            BookLib.Int2 mousePosCur = new((int)mousePos.x, (int)mousePos.y);
-            BookLib.Int2 mousePosPrevInt = new((int)mousePosPrev.x, (int)mousePosPrev.y);
+            BookLib.Int2 mousePosCur = new(0, 0);
+            mousePosCur.x = (int)(mousePos.x * (imgWidth / screenBounds.x));
+            mousePosCur.y = (int)(mousePos.y * (imgHeight / screenBounds.y));
+
+            BookLib.Int2 mousePosPrevInt = new(0, 0);
+            mousePosPrevInt.x = (int)(mousePosPrev.x * (imgWidth / screenBounds.x));
+            mousePosPrevInt.y = (int)(mousePosPrev.y * (imgHeight / screenBounds.y));
 
             int pointsCount = (int)Mathf.Ceil(BookLib.DistanceCalc(mousePosCur.x, mousePosCur.y, mousePosPrevInt.x, mousePosPrevInt.y) / POINTS_DIVISOR);
             List<BookLib.Int2> points = new();
@@ -398,8 +362,8 @@ namespace BookLib
         {
             StampStencil();
 
-            int x = (int)mousePos.x;
-            int y = (int)mousePos.y;
+            int x = (int)(mousePos.x * (imgWidth / screenBounds.x));
+            int y = (int)(mousePos.y * (imgHeight / screenBounds.y));
             if (!BookLib.Point2DInBounds(imgBoundsScreen, Input.mousePosition))
                 yield break;
 
@@ -523,7 +487,7 @@ namespace BookLib
         {
             if (undoTextures.Peek() == default(Texture2D))
                 return;
-
+            
             SetRedoTexture();
             colorMap = undoTextures.Pop().GetPixels32();
             GenerateIDMap();
@@ -584,7 +548,17 @@ namespace BookLib
             GenerateIDMap();
             StampStencil();
         }
-        
+        public void PreviousStencil()
+        {
+            undoTextures.Clear();
+            redoTextures.Clear();
+            if (--activeStencil < 0) { activeStencil = stencils.Count - 1; }
+            mainTexture = allTextures[activeStencil];
+            colorMap = mainTexture.GetPixels32();
+            GenerateIDMap();
+            StampStencil();
+        }
+
         public void SetSelectedColor(Color32 color)
         {
             selectedColor = color;

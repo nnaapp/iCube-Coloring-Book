@@ -4,7 +4,15 @@ using UnityEngine;
 
 public class NextButton : MonoBehaviour
 {
+    [SerializeField] private Direction direction = Direction.Forward;
     [SerializeField] private BookLib.ImgTools img;
+
+    enum Direction
+    { 
+        Forward,
+        Backward
+    }
+
     void Start()
     {
         if (!img)
@@ -13,6 +21,9 @@ public class NextButton : MonoBehaviour
 
     public void OnClick()
     {
-        img.NextStencil();
+        if (direction == Direction.Forward)
+            img.NextStencil();
+        else if (direction == Direction.Backward)
+            img.PreviousStencil();
     }
 }
